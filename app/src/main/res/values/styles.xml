@@ -19,6 +19,23 @@
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryDark">@color/primary_dark_color</item>
     </style>
+    <style name="NumberTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/category_numbers</item>
+        <item name="colorPrimaryDark">@color/category_numbers</item>
+    </style>
+    <style name="PhraseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/category_phrases</item>
+        <item name="colorPrimaryDark">@color/category_phrases</item>
+    </style>
+    <style name="ColorsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/category_colors</item>
+        <item name="colorPrimaryDark">@color/category_colors</item>
+    </style>
+    <style name="FamilyTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/category_family</item>
+        <item name="colorPrimaryDark">@color/category_family</item>
+    </style>
+
 
     <!-- Style for a category of vocabulary words -->
     <style name="CategoryStyle">
