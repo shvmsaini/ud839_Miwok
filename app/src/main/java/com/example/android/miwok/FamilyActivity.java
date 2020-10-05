@@ -27,12 +27,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class FamilyActivity extends AppCompatActivity {
-
+    private MediaPlayer m;
+    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            // Now that the sound file has finished playing, release the media player resources.
+            releaseMediaPlayer();
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family);
-        final ArrayList<Word> words = new ArrayList<Word>();
+        final ArrayList<Word> words = new ArrayList<>();
         words.add( new Word("father","әpә",R.drawable.family_father,R.raw.family_father));
         words.add( new Word("mother","әṭa",R.drawable.family_mother,R.raw.family_mother));
         words.add( new Word("son","angsi",R.drawable.family_son,R.raw.family_son));
@@ -43,7 +50,7 @@ public class FamilyActivity extends AppCompatActivity {
         words.add( new Word("younger sister","kolliti",R.drawable.family_younger_sister,R.raw.family_younger_sister));
         words.add( new Word("grandmother","ama",R.drawable.family_grandmother,R.raw.family_grandmother));
         words.add( new Word("grandfather","paapa",R.drawable.family_grandfather,R.raw.family_grandfather));
-         WordAdapter itemsAdapter =
+        WordAdapter itemsAdapter =
                 new WordAdapter( this,words,R.color.category_family_list);
         ListView listView =  findViewById(R.id.list);
 
@@ -56,11 +63,27 @@ public class FamilyActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                releaseMediaPlayer();
                 Word word = words.get(position);
-                MediaPlayer m  = MediaPlayer.create(FamilyActivity.this,word.getmAudioResourceId());
+                m  = MediaPlayer.create(FamilyActivity.this,word.getmAudioResourceId());
                 m.start();
+                m.setOnCompletionListener(mCompletionListener);
             }
         });
 
     }
+    public void releaseMediaPlayer() {
+        // If the media player is not null, then it may be currently playing a sound.
+        if (m != null) {
+            // Regardless of the current state of the media player, release its resources
+            // because we no longer need it.
+            m.release();
+
+            // Set the media player back to null. For our code, we've decided that
+            // setting the media player to null is an easy way to tell that the media player
+            // is not configured to play an audio file at the moment.
+            m = null;
+        }
+    }
+
 }

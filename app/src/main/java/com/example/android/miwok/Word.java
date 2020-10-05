@@ -23,7 +23,7 @@ public class Word {
 
 
     public String getmMiwokTranslation(){
-            return mMiwokTranslation;
+        return mMiwokTranslation;
     }
 
     public String getmDefaultTranslation() {

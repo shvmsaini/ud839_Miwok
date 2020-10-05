@@ -28,6 +28,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class NumbersActivity extends AppCompatActivity {
+    private MediaPlayer m;
+    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            // Now that the sound file has finished playing, release the media player resources.
+            releaseMediaPlayer();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +43,7 @@ public class NumbersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_numbers);
 
         // Create a list of words
-        final ArrayList<Word> words = new ArrayList<Word>();
+        final ArrayList<Word> words = new ArrayList<>();
         words.add( new Word("one","lutti",R.drawable.number_one,R.raw.number_one));
         words.add( new Word("two","otiiko",R.drawable.number_two,R.raw.number_two));
         words.add( new Word("three","tolookosu",R.drawable.number_three,R.raw.number_three));
@@ -69,10 +77,25 @@ public class NumbersActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                releaseMediaPlayer();
                 Word word = words.get(position);
-                MediaPlayer m  = MediaPlayer.create(NumbersActivity.this,word.getmAudioResourceId());
+                m  = MediaPlayer.create(NumbersActivity.this,word.getmAudioResourceId());
                 m.start();
+                m.setOnCompletionListener(mCompletionListener);
             }
         });
+    }
+    public void releaseMediaPlayer() {
+        // If the media player is not null, then it may be currently playing a sound.
+        if (m != null) {
+            // Regardless of the current state of the media player, release its resources
+            // because we no longer need it.
+            m.release();
+
+            // Set the media player back to null. For our code, we've decided that
+            // setting the media player to null is an easy way to tell that the media player
+            // is not configured to play an audio file at the moment.
+            m = null;
+        }
     }
 }
