@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class ColorsActivity extends AppCompatActivity {
     private MediaPlayer m;
-    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+    private final MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
             // Now that the sound file has finished playing, release the media player resources.
@@ -84,5 +84,9 @@ public class ColorsActivity extends AppCompatActivity {
             // is not configured to play an audio file at the moment.
             m = null;
         }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop(); releaseMediaPlayer();
     }
 }

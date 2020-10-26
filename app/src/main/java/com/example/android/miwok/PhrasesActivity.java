@@ -18,14 +18,12 @@ package com.example.android.miwok;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class PhrasesActivity extends AppCompatActivity {
@@ -80,6 +78,10 @@ public class PhrasesActivity extends AppCompatActivity {
             // is not configured to play an audio file at the moment.
             m = null;
         }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop(); releaseMediaPlayer();
     }
 }
 
