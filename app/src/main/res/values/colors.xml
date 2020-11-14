@@ -18,11 +18,11 @@
     <color name="primary_color">#4A312A</color>
 
     <!-- Primary dark color of the app (shown in the status bar) -->
-    <color name="primary_dark_color">#2F1D1A</color>
-
+<!--    <color name="primary_dark_color">#2F1D1A</color>-->
+    <color name="primary_dark_color">#4A312A</color>
     <!-- Background color for app -->
     <color name="tan_background">#FFF7DA</color>
-
+    <color name="text_color_primary">#ffffff</color>
     <!-- Background color for the numbers category -->
     <color name="category_numbers">#FD8E09</color>
     <color name="category_numbers_list">#CBFD8E09</color>
