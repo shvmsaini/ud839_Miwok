@@ -41,14 +41,16 @@ public class ColorFragment extends Fragment {
 
                 // Pause playback and reset player to the start of the file. That way, we can
                 // play the word from the beginning when we resume playback.
-                m.pause();
-                m.seekTo(0);
+//                m.pause();
+//                m.seekTo(0);
+                m.stop();
+                releaseMediaPlayer();
                 Log.d("*******","Lost audio focus Transient");
 
             } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                 Log.d("****","AUDIOFOCUS_REQUEST_GAIN");
                 // The AUDIOFOCUS_GAIN case means we have regained focus and can resume playback.
-                m.start();
+//                m.start();
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                 // The AUDIOFOCUS_LOSS case means we've lost audio focus and
                 Log.d("****","Lost audio focus");
@@ -93,6 +95,7 @@ public class ColorFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 releaseMediaPlayer();
+                Word word = words.get(position);
                 mAudioManager = (AudioManager) Objects.requireNonNull(getActivity()).getSystemService(Context.AUDIO_SERVICE);
                 AudioAttributes mAudioAttributes =
                         new AudioAttributes.Builder()
@@ -111,7 +114,7 @@ public class ColorFragment extends Fragment {
                         Log.d("****","AUDIOFOCUS_REQUEST_FAILED");  // don’t start playback
                     case AudioManager.AUDIOFOCUS_REQUEST_GRANTED: {
                         Log.d("****","AUDIOFOCUS_REQUEST_GRANTED");
-                        Word word = words.get(position);
+
                         m  = MediaPlayer.create(getActivity(),word.getmAudioResourceId());
                         m.start();
                         m.setOnCompletionListener(mCompletionListener);
@@ -127,6 +130,10 @@ public class ColorFragment extends Fragment {
     public void releaseMediaPlayer() {
         // If the media player is not null, then it may be currently playing a sound.
         if (m != null) {
+            if(m.isPlaying()) {
+                m.stop();
+            }
+            m.reset();
             // Regardless of the current state of the media player, release its resources
             // because we no longer need it.
             m.release();

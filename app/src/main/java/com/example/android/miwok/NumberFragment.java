@@ -5,18 +5,15 @@ import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -30,6 +27,7 @@ public class NumberFragment extends Fragment {
     private final MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
+            m.reset();
             releaseMediaPlayer();
         }
     };
@@ -45,33 +43,31 @@ public class NumberFragment extends Fragment {
 
                 // Pause playback and reset player to the start of the file. That way, we can
                 // play the word from the beginning when we resume playback.
-                m.pause();
-                m.seekTo(0);
+                m.stop();
+                releaseMediaPlayer();
+//                m.pause();
+//                m.seekTo(0);
                 Log.d("*******","Lost audio focus Transient");
 
             } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                 Log.d("****","AUDIOFOCUS_REQUEST_GAIN");
                 // The AUDIOFOCUS_GAIN case means we have regained focus and can resume playback.
-                m.start();
+//                m.start();
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                 // The AUDIOFOCUS_LOSS case means we've lost audio focus and
                 Log.d("****","Lost audio focus");
-//                m.pause();
+                // m.pause();
                 releaseMediaPlayer();
-//                mAudioManager.abandonAudioFocusRequest(mFocusRequest);
+                // mAudioManager.abandonAudioFocusRequest(mFocusRequest);
                 // Stop playback and clean up resources
-
 
             }
         }
     };
 
-
     public NumberFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,8 +93,7 @@ public class NumberFragment extends Fragment {
         words.add( new Word("nine","wo’e",R.drawable.number_nine,R.raw.number_nine));
         words.add( new Word("ten","na'aacha",R.drawable.number_ten,R.raw.number_ten));
 
-        final WordAdapter itemsAdapter =
-                new WordAdapter( getActivity(),words,R.color.category_numbers_list);
+        final WordAdapter itemsAdapter = new WordAdapter( getActivity(),words,R.color.category_numbers_list);
         ListView listView =  rootView.findViewById(R.id.list);
         listView.setAdapter(itemsAdapter);
 
@@ -107,10 +102,11 @@ public class NumberFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 releaseMediaPlayer();
+                Word word = words.get(position);
                 mAudioManager = (AudioManager) Objects.requireNonNull(getActivity()).getSystemService(Context.AUDIO_SERVICE);
                 //getActivity because fragments can't access system services
                 AudioAttributes mAudioAttributes =
-                        new AudioAttributes.Builder()
+                        new AudioAttributes.Builder().setLegacyStreamType(AudioManager.STREAM_MUSIC)
                                 .setUsage(AudioAttributes.USAGE_MEDIA)
                                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                                 .build();
@@ -126,7 +122,7 @@ public class NumberFragment extends Fragment {
                         Log.d("****","AUDIOFOCUS_REQUEST_FAILED");  // don’t start playback
                     case AudioManager.AUDIOFOCUS_REQUEST_GRANTED: {
                         Log.d("****","AUDIOFOCUS_REQUEST_GRANTED");
-                        Word word = words.get(position);
+
                         m  = MediaPlayer.create(getActivity(),word.getmAudioResourceId());
                         m.start();
                         m.setOnCompletionListener(mCompletionListener);
@@ -146,6 +142,10 @@ public class NumberFragment extends Fragment {
     public void releaseMediaPlayer() {
 
         if (m != null) {
+            if(m.isPlaying()) {
+                m.stop();
+            }
+            m.reset();
             m.release();
 
             // Set the media player back to null. For our code, we've decided that

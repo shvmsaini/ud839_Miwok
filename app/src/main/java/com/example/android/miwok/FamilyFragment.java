@@ -41,14 +41,16 @@ public class FamilyFragment extends Fragment {
 
                 // Pause playback and reset player to the start of the file. That way, we can
                 // play the word from the beginning when we resume playback.
-                m.pause();
-                m.seekTo(0);
+//                m.pause();
+//                m.seekTo(0);
+                m.stop();
+                releaseMediaPlayer();
                 Log.d("*******","Lost audio focus Transient");
 
             } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                 Log.d("****","AUDIOFOCUS_REQUEST_GAIN");
                 // The AUDIOFOCUS_GAIN case means we have regained focus and can resume playback.
-                m.start();
+//                m.start();
             } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                 // The AUDIOFOCUS_LOSS case means we've lost audio focus and
                 Log.d("****","Lost audio focus");
@@ -101,6 +103,7 @@ public class FamilyFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 releaseMediaPlayer();
+                Word word = words.get(position);
                 mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
                 AudioAttributes mAudioAttributes =
                         new AudioAttributes.Builder()
@@ -119,7 +122,7 @@ public class FamilyFragment extends Fragment {
                         Log.d("****","AUDIOFOCUS_REQUEST_FAILED");  // don’t start playback
                     case AudioManager.AUDIOFOCUS_REQUEST_GRANTED: {
                         Log.d("****","AUDIOFOCUS_REQUEST_GRANTED");
-                        Word word = words.get(position);
+
                         m  = MediaPlayer.create(getActivity(),word.getmAudioResourceId());
                         m.start();
                         m.setOnCompletionListener(mCompletionListener);
@@ -138,6 +141,10 @@ public class FamilyFragment extends Fragment {
         if (m != null) {
             // Regardless of the current state of the media player, release its resources
             // because we no longer need it.
+            if(m.isPlaying()) {
+                m.stop();
+            }
+            m.reset();
             m.release();
 
             // Set the media player back to null. For our code, we've decided that

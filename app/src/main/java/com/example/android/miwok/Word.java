@@ -1,12 +1,12 @@
 package com.example.android.miwok;
 
 public class Word {
-    private String mDefaultTranslation;
-    private String mMiwokTranslation;
+    private final String mDefaultTranslation;
+    private final String mMiwokTranslation;
 
     private static final int NO_IMAGE_PROVIDED = -1;
     private int mImageResourceId = NO_IMAGE_PROVIDED;
-    private int mAudioResourceId;
+    private final int mAudioResourceId;
     public Word (String DT, String MT,int resourceID,int audioID){
         mDefaultTranslation = DT;
         mMiwokTranslation = MT;

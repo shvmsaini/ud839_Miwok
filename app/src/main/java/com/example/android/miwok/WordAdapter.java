@@ -3,6 +3,7 @@ package com.example.android.miwok;
 import android.app.Activity;
 import android.media.Image;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,12 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 
 public class WordAdapter extends ArrayAdapter<Word> {
-    private int colorResourceId;
-    private int audioResourceId;
+    private final int colorResourceId;
+
     public WordAdapter(Activity context, ArrayList<Word>  words,int colorID) {
         super(context,0, words);
         colorResourceId= colorID;
-//        audioResourceId = audioID;
+
     }
 
     @NonNull
@@ -30,6 +31,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItemView = convertView;
         if(convertView==null){
+            Log.d("Word","In the convertview");
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item,parent,false);
         }
         Word currentWord = getItem(position);
@@ -52,15 +54,6 @@ public class WordAdapter extends ArrayAdapter<Word> {
         View textContainer = listItemView.findViewById(R.id.text_container);
         int color = ContextCompat.getColor(getContext(),colorResourceId);
         textContainer.setBackgroundColor(color);
-        final MediaPlayer m = MediaPlayer.create(this.getContext(),currentWord.getmAudioResourceId());
-
-//        listItemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                m.start();
-//            }
-//        });
-
 
 
         return listItemView;

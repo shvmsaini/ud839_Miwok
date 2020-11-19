@@ -18,6 +18,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryDark">@color/primary_dark_color</item>
+
         <item name="android:textColorPrimary">@color/text_color_primary</item>
 
     </style>
