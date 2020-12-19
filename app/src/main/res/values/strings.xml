@@ -14,6 +14,7 @@
 -->
 <resources>
     <!-- Title for the application. [CHAR LIMIT=12] -->
+    <string name="Mode">Day</string>
     <string name="app_name">Miwok</string>
 
     <!-- Category name for phrases [CHAR LIMIT=20] -->
